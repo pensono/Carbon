@@ -2,11 +2,14 @@ grammar Carbon;
 
 WS: [ \n\t\r]+ -> skip;
 
+file : expressionBody EOF;
+
 expression
     : '{' expressionBody '}' # CompositeExpr
     | DIGIT+ # NumberLiteral
     | identifier argumentList? # IdentifierExpr
-    | expression OPERATOR expression # OperatorExpr
+    | lhs=expression operator=OPERATOR rhs=expression # OperatorExpr
+    | base=expression DOT name=identifier # AccessorExpr
     ;
 
 expressionBody
@@ -35,3 +38,4 @@ identifier
 DIGIT : [0-9];
 LETTER: [a-zA-Z];
 OPERATOR: '+' | '-' | '*' | '/';
+DOT: '.';

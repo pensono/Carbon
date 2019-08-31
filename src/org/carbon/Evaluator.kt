@@ -6,7 +6,11 @@ fun evaluate(program: String, property: String) : CarbonObject? {
     val parsed = parseFile(program) ?: error("Parse failed")
     val carbonObject = buildComposite(parsed.definitions)
 
-    return carbonObject.values[property]?.evaluate()
+    if (!carbonObject.values.containsKey(property)) {
+        error("Could not find $property in $carbonObject")
+    }
+
+    return carbonObject.values.getValue(property).evaluate()
 }
 
 private class ExpressionVisitor(val scope: CarbonSyntax) : CarbonBaseVisitor<CarbonSyntax>() {
@@ -17,6 +21,15 @@ private class ExpressionVisitor(val scope: CarbonSyntax) : CarbonBaseVisitor<Car
 
     override fun visitIdentifierExpr(ctx: CarbonParser.IdentifierExprContext): CarbonSyntax {
         return Identifier(ctx.text, scope)
+    }
+
+    override fun visitAccessorExpr(ctx: CarbonParser.AccessorExprContext): CarbonSyntax {
+        val base = visit(ctx.base)
+        return Identifier(ctx.name.text, base)
+    }
+
+    override fun visitCompositeExpr(ctx: CarbonParser.CompositeExprContext): CarbonSyntax {
+        return buildComposite(ctx.expressionBody().definitions)
     }
 }
 

@@ -20,7 +20,7 @@ fun parseFile(input: String) : CarbonParser.ExpressionBodyContext? {
     lexer.addErrorListener(errorListener)
     parser.addErrorListener(errorListener)
 
-    val result = parser.expressionBody()
+    val result = parser.file().expressionBody()
 
     return if (noErrors) result else null
 }

@@ -21,12 +21,32 @@ class EvaluateTest {
         assertEquals(wrap(5), value)
     }
 
-//    @Test
-//    fun propertyAccessor() {
-//        val value = evaluate("""
-//            Value = { Inner = 5 }
-//            R = Value.Inner
-//        """, "Value") as Composite
-//        assertEquals(wrap(5), value.values["Inner"])
-//    }
+    @Test
+    fun composite() {
+        val value = evaluate("""
+            Value = { Inner = 5 }
+        """, "Value") as Composite
+        assertEquals(wrap(5), value.values["Inner"])
+    }
+
+    @Test
+    fun propertyAccessor() {
+        val value = evaluate("""
+            Value = { Inner = 5 }
+            R = Value.Inner
+        """, "R")
+        assertEquals(wrap(5), value)
+    }
+
+    @Test
+    fun trickyIdentifiers() {
+        val value = evaluate("""
+            Value = { 
+                Inner = 5
+                Other = Inner 
+            }
+            R = Value.Other
+        """, "R")
+        assertEquals(wrap(5), value)
+    }
 }
