@@ -3,10 +3,10 @@ grammar Carbon;
 WS: [ \n\t\r]+ -> skip;
 
 expression
-    : '{' expressionBody '}'
-    | numberLiteral
-    | identifier argumentList?
-    | expression OPERATOR expression
+    : '{' expressionBody '}' # CompositeExpr
+    | DIGIT+ # NumberLiteral
+    | identifier argumentList? # IdentifierExpr
+    | expression OPERATOR expression # OperatorExpr
     ;
 
 expressionBody
@@ -28,12 +28,8 @@ parameterList
 
 param : expression (':' expression)?;
 
-numberLiteral
-    : DIGIT+
-    ;
-
 identifier
-    : LETTER (DIGIT | LETTER)+
+    : LETTER (DIGIT | LETTER)*
     ;
 
 DIGIT : [0-9];

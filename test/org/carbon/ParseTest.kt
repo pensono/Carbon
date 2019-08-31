@@ -26,7 +26,8 @@ class ParseTest {
                 Bound = 5
                 Free : Int
             }
-        """
+        """,
+        "A = 6" // Single letter
     ])
     fun basicParses(input: String) = parseTest(input)
 
