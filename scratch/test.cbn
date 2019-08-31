@@ -1,0 +1,6 @@
+Test = {}
+
+Other = {
+    Test = "Wow"
+    Circle(Square) = Square * 2
+}
