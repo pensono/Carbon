@@ -5,7 +5,7 @@ WS: [ \n\t\r]+ -> skip;
 expression
     : '{' expressionBody '}'
     | numberLiteral
-    | identifier
+    | identifier argumentList?
     ;
 
 expressionBody
@@ -13,9 +13,19 @@ expressionBody
     ;
 
 definition
-    : identifier '=' expression
-    | identifier ':' expression
+    : identifier parameterList? '=' expression
+    | parameter
     ;
+
+argumentList
+    : '(' expression (',' expression)* ')'
+    ;
+
+parameterList
+    : '(' parameter (',' parameter)* ')'
+    ;
+
+parameter : expression (':' expression)?;
 
 numberLiteral
     : DIGIT+
