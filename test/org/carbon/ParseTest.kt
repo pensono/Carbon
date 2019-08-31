@@ -13,6 +13,19 @@ class ParseTest {
             Test = {
                 Inner = 5
             }
+        """,
+        """
+            Test = {
+                Inner = 5
+                AnotherInner = 6
+            }
+        """,
+        "Test : Type",
+        """
+            Test = {
+                Bound = 5
+                Free : Int
+            }
         """
     ])
     fun testParses(input: String) {

@@ -5,10 +5,16 @@ WS: [ \n\t\r]+ -> skip;
 expression
     : '{' expressionBody '}'
     | numberLiteral
+    | identifier
     ;
 
 expressionBody
-    : (identifier '=' expression)*
+    : definition*
+    ;
+
+definition
+    : identifier '=' expression
+    | identifier ':' expression
     ;
 
 numberLiteral
