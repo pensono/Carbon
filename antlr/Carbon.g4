@@ -6,15 +6,16 @@ expression
     : '{' expressionBody '}'
     | numberLiteral
     | identifier argumentList?
+    | expression OPERATOR expression
     ;
 
 expressionBody
-    : definition*
+    : definitions+=definition*
     ;
 
 definition
-    : identifier parameterList? '=' expression
-    | parameter
+    : name=identifier parameterList? '=' expression # Declaration
+    | param # Parameter
     ;
 
 argumentList
@@ -22,10 +23,10 @@ argumentList
     ;
 
 parameterList
-    : '(' parameter (',' parameter)* ')'
+    : '(' param (',' param)* ')'
     ;
 
-parameter : expression (':' expression)?;
+param : expression (':' expression)?;
 
 numberLiteral
     : DIGIT+
@@ -37,3 +38,4 @@ identifier
 
 DIGIT : [0-9];
 LETTER: [a-zA-Z];
+OPERATOR: '+' | '-' | '*' | '/';

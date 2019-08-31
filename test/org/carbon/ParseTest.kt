@@ -26,7 +26,12 @@ class ParseTest {
                 Bound = 5
                 Free : Int
             }
-        """,
+        """
+    ])
+    fun basicParses(input: String) = parseTest(input)
+
+    @ParameterizedTest
+    @ValueSource(strings = [
         // Function calls
         "Shape = Square(4)",
         "Shape = Rectangle(4,5)",
@@ -37,13 +42,28 @@ class ParseTest {
         // for good measure
         "Square(Size:Integer) = 4"
     ])
-    fun testParses(input: String) {
-        assertNotNull(parseFile(input))
-    }
+    fun parameters(input: String) = parseTest(input)
+
+    @ParameterizedTest
+    @ValueSource(strings = [
+        "Val = 1 + 1",
+        "Val = 1 + 1 * 7",
+        """
+            Val = 1 + 1
+            Another = 2 - 2
+        """
+    ])
+    fun operators(input: String) = parseTest(input)
 
     @ParameterizedTest
     @ValueSource(strings = ["."])
-    fun testDoesNotParse(input: String) {
+    fun testDoesNotParse(input: String) = parseFailTest(input)
+
+    private fun parseTest(input: String) {
+        assertNotNull(parseFile(input))
+    }
+
+    private fun parseFailTest(input: String) {
         assertNull(parseFile(input))
     }
 }

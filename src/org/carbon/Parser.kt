@@ -2,7 +2,7 @@ package org.carbon
 
 import org.antlr.v4.runtime.*
 
-fun parseFile(input: String) : Any? {
+fun parseFile(input: String) : CarbonParser.ExpressionBodyContext? {
     val charStream = CharStreams.fromString(input)
     val lexer = CarbonLexer(charStream)
     val tokens = CommonTokenStream(lexer)
