@@ -1,5 +1,8 @@
 package org.carbon.runtime
 
-open class CarbonObject : CarbonSyntax() {
-    override fun evaluate() = this
+import org.carbon.syntax.CarbonSyntax
+
+abstract class CarbonObject() {
+    abstract fun lookupName(name: String) : CarbonObject?
+    abstract fun getMember(name: String) : CarbonObject?
 }

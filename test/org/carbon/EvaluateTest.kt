@@ -26,7 +26,7 @@ class EvaluateTest {
         val value = evaluate("""
             Value = { Inner = 5 }
         """, "Value") as Composite
-        assertEquals(wrap(5), value.values["Inner"])
+        assertEquals(wrap(5), value.getMember("Inner"))
     }
 
     @Test
@@ -46,6 +46,31 @@ class EvaluateTest {
                 Other = Inner 
             }
             R = Value.Other
+        """, "R")
+        assertEquals(wrap(5), value)
+    }
+
+    @Test
+    fun multiLevel() {
+        val value = evaluate("""
+            Value = { 
+                Outer = {
+                    Inner = 5
+                } 
+            }
+            R = Value.Outer.Inner
+        """, "R")
+        assertEquals(wrap(5), value)
+    }
+
+    @Test
+    fun searchOuterScopes() {
+        val value = evaluate("""
+            TopLevel = 5
+            Value = { 
+                Inner = TopLevel
+            }
+            R = Value.Inner
         """, "R")
         assertEquals(wrap(5), value)
     }
