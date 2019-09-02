@@ -20,6 +20,13 @@ class ParseTest {
                 AnotherInner = 6
             }
         """,
+        "Test = { A, B }",
+        """
+            Test = {
+                A:Int, 
+                B:Int
+            }
+        """,
         "Test : Type",
         """
             Test = {

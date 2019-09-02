@@ -1,19 +1,21 @@
 grammar Carbon;
 
-WS: [ \n\t\r]+ -> skip;
+WS: [ ]+ -> channel(HIDDEN);
+NL: [\r\n];
 
-file : expressionBody EOF;
+file : NL* expressionBody NL* EOF;
 
 expression
-    : '{' expressionBody '}' # CompositeExpr
+    : '{' NL* expressionBody NL* '}' # CompositeExpr
     | DIGIT+ # NumberLiteral
-    | identifier argumentList? # IdentifierExpr
+    | identifier # IdentifierExpr
+    | base=expression argumentList # CallExpr
     | lhs=expression operator=OPERATOR rhs=expression # OperatorExpr
     | base=expression DOT name=identifier # AccessorExpr
     ;
 
 expressionBody
-    : definitions+=definition*
+    : (definitions+=definition (',' NL* | NL+)?)*
     ;
 
 definition
@@ -22,14 +24,14 @@ definition
     ;
 
 argumentList
-    : '(' expression (',' expression)* ')'
+    : '(' parameters+=expression (',' parameters+=expression)* ')'
     ;
 
 parameterList
-    : '(' param (',' param)* ')'
+    : '(' parameters+=param (',' parameters+=param)* ')'
     ;
 
-param : expression (':' expression)?;
+param : name=expression (':' type=expression)?;
 
 identifier
     : LETTER (DIGIT | LETTER)*
