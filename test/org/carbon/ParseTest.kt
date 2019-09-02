@@ -9,6 +9,7 @@ class ParseTest {
     @ValueSource(strings = [
         "Test=5", // No whitespace
         "Test = 5", // whitespace
+        "Test=-5", // Negative
         """
             Test = {
                 Inner = 5

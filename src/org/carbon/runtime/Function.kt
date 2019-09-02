@@ -2,11 +2,11 @@ package org.carbon.runtime
 
 import org.carbon.syntax.CarbonSyntax
 
-class Function(val parameters: List<String>, val body: CarbonSyntax, val lexicalScope: CarbonObject) : CarbonObject() {
+open class Function(val parameters: List<String>, val body: CarbonSyntax, val lexicalScope: CarbonObject) : CarbonObject(), Callable {
     override fun lookupName(name: String): CarbonObject? = null
     override fun getMember(name: String): CarbonObject? = null
 
-    fun call(arguments: List<CarbonObject>) : CarbonObject {
+    override fun call(arguments: List<CarbonObject>) : CarbonObject {
         assert(parameters.size == arguments.size)
 
         val argumentMapping = parameters.zip(arguments).associateBy({ it.first }, { it.second })

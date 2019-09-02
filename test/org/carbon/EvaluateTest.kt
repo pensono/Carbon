@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class EvaluateTest {
     @Test
     fun basicEval() {
-        assertEquals(wrap(5), evaluate("Value = 5", "Value"))
+        assertEquals(wrap(5), evaluate("Value = 5").getMember("Value"))
     }
 
     @Test
@@ -17,7 +17,7 @@ class EvaluateTest {
         val value = evaluate("""
             Value = 5
             R = Value
-        """, "R")
+        """).getMember("R")
         assertEquals(wrap(5), value)
     }
 
@@ -25,7 +25,7 @@ class EvaluateTest {
     fun composite() {
         val value = evaluate("""
             Value = { Inner = 5 }
-        """, "Value") as Composite
+        """).getMember("Value") as Composite
         assertEquals(wrap(5), value.getMember("Inner"))
     }
 
@@ -34,7 +34,7 @@ class EvaluateTest {
         val value = evaluate("""
             Value = { Inner = 5 }
             R = Value.Inner
-        """, "R")
+        """).getMember("R")
         assertEquals(wrap(5), value)
     }
 
@@ -46,7 +46,7 @@ class EvaluateTest {
                 Other = Inner
             }
             R = Value.Other
-        """, "R")
+        """).getMember("R")
         assertEquals(wrap(5), value)
     }
 
@@ -59,7 +59,7 @@ class EvaluateTest {
                 } 
             }
             R = Value.Outer.Inner
-        """, "R")
+        """).getMember("R")
         assertEquals(wrap(5), value)
     }
 
@@ -71,7 +71,7 @@ class EvaluateTest {
                 Inner = TopLevel
             }
             R = Value.Inner
-        """, "R")
+        """).getMember("R")
         assertEquals(wrap(5), value)
     }
     @Test
@@ -84,7 +84,7 @@ class EvaluateTest {
                 HeightAlias = Height,
             }
             R = Rectangle(4, 5)
-        """, "R") as Composite
+        """).getMember("R") as Composite
 
         // Hmm not ideal that it's not a member directly... is this the correct implementation?
         assertEquals(wrap(4), value.getMember("WidthAlias"))
@@ -96,7 +96,7 @@ class EvaluateTest {
         val value = evaluate("""
             Id(A : Integer) = A
             R = Id(5)
-        """, "R")
+        """).getMember("R")
         assertEquals(wrap(5), value)
     }
 
@@ -106,7 +106,7 @@ class EvaluateTest {
             OuterVar = 5
             Id(A : Integer) = OuterVar
             R = Id(3)
-        """, "R")
+        """).getMember("R")
         assertEquals(wrap(5), value)
     }
 }

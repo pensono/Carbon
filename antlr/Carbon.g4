@@ -7,11 +7,11 @@ file : NL* expressionBody NL* EOF;
 
 expression
     : '{' NL* expressionBody NL* '}' # CompositeExpr
-    | DIGIT+ # NumberLiteral
-    | identifier # IdentifierExpr
     | base=expression argumentList # CallExpr
-    | lhs=expression operator=OPERATOR rhs=expression # OperatorExpr
+    | lhs=expression operator=operator1 rhs=expression # OperatorExpr
     | base=expression DOT name=identifier # AccessorExpr
+    | MINUS? DIGIT+ # NumberLiteral
+    | identifier # IdentifierExpr
     ;
 
 expressionBody
@@ -39,5 +39,6 @@ identifier
 
 DIGIT : [0-9];
 LETTER: [a-zA-Z];
-OPERATOR: '+' | '-' | '*' | '/';
+operator1: '+' | MINUS | '*' | '/';
+MINUS: '-';
 DOT: '.';
