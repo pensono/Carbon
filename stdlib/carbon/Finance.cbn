@@ -1,0 +1,20 @@
+
+// Use some sort of fractional data type
+Currency = Integer
+
+Loan(Currency) = {
+    Principal: Currency,
+    Apr: Ratio,
+
+    // Do something to add units to these?
+    PeriodsPerYear: Integer[> 0]
+    DurationYears: Integer[> 0]
+    PeriodCount = DurationYears * PaymentsPerYear
+
+    RatePerPeriod = Apr / PeriodsPerYear
+    FinancingCost = LoanCost -
+    LoanCost = Payment * PeriodCount
+    Payment = (RatePerPeriod * Principal) / (1 - (1 + RatePerPeriod) ^ (-PeriodCount))
+}
+
+Loan(Currency, Payment) =

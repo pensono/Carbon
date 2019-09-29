@@ -19,4 +19,14 @@ class IntegerTest {
         val result = evaluate(program)
         assertEquals(result.getMember("B"), result.getMember("A"))
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = [
+        "A = 2 + 3 * 3, B = 11",
+        "A = 2 * 3 + 3, B = 9"
+    ])
+    fun orderOfOperations(program: String) {
+        val result = evaluate(program)
+        assertEquals(result.getMember("B"), result.getMember("A"))
+    }
 }
