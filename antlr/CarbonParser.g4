@@ -1,46 +1,39 @@
-grammar Carbon;
+parser grammar CarbonParser;
 
-WS: [ ]+ -> channel(HIDDEN);
-NL: [\r\n];
+options { tokenVocab = CarbonLexer; }
 
 file : NL* expressionBody NL* EOF;
 
 expression
-    : '{' NL* expressionBody NL* '}' # CompositeExpr
+    : L_CURLY NL* expressionBody NL* R_CURLY # CompositeExpr
     | base=expression argumentList # CallExpr
     | lhs=expression operator=OPERATOR2 rhs=expression # OperatorExpr
     | lhs=expression operator=(OPERATOR1 | MINUS) rhs=expression # OperatorExpr
     | base=expression DOT name=identifier # AccessorExpr
     | MINUS? DIGIT+ # NumberLiteral
+    | QUOTE_OPEN content=LITERAL_TEXT? QUOTE_CLOSE # StringLiteral
     | identifier # IdentifierExpr
     ;
 
 expressionBody
-    : (definitions+=definition (',' NL* | NL+)?)*
+    : (definitions+=definition (COMMA NL* | NL+)?)*
     ;
 
 definition
-    : name=identifier parameterList? '=' expression # Declaration
+    : name=identifier parameterList? EQUALS expression # Declaration
     | param # Parameter
     ;
 
 argumentList
-    : '(' parameters+=expression (',' parameters+=expression)* ')'
+    : L_PAREN parameters+=expression (COMMA parameters+=expression)* R_PAREN
     ;
 
 parameterList
-    : '(' parameters+=param (',' parameters+=param)* ')'
+    : L_PAREN parameters+=param (COMMA parameters+=param)* R_PAREN
     ;
 
-param : name=expression (':' type=expression)?;
+param : name=expression (COLON type=expression)?;
 
 identifier
     : LETTER (DIGIT | LETTER)*
     ;
-
-DIGIT : [0-9];
-LETTER: [a-zA-Z];
-OPERATOR1: '+';
-OPERATOR2: '*' | '/';
-MINUS: '-';
-DOT: '.';

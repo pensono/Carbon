@@ -9,10 +9,15 @@ fun evaluate(program: String) : Composite {
     return buildComposite(parsed.definitions, RootScope)
 }
 
-private object ExpressionVisitor : CarbonBaseVisitor<CarbonSyntax>() {
+private object ExpressionVisitor : CarbonParserBaseVisitor<CarbonSyntax>() {
     override fun visitNumberLiteral(ctx: CarbonParser.NumberLiteralContext): CarbonSyntax {
         val value = Integer.parseInt(ctx.text)
         return IntegerLiteral(value)
+    }
+
+    override fun visitStringLiteral(ctx: CarbonParser.StringLiteralContext): CarbonSyntax {
+        // If content is missing, then it's the empty string literal
+        return StringLiteral(ctx.content?.text ?: "")
     }
 
     override fun visitIdentifierExpr(ctx: CarbonParser.IdentifierExprContext): CarbonSyntax {

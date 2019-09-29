@@ -65,6 +65,17 @@ class ParseTest {
     fun operators(input: String) = parseTest(input)
 
     @ParameterizedTest
+    @ValueSource(strings = [
+        """
+            Test = "Hello"
+        """,
+        """
+            Empty = ""
+        """
+    ])
+    fun stringLiterals(input: String) = parseTest(input)
+
+    @ParameterizedTest
     @ValueSource(strings = ["."])
     fun testDoesNotParse(input: String) = parseFailTest(input)
 
