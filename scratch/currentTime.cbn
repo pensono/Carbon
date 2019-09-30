@@ -1,0 +1,4 @@
+#Sample(60*1000) // It would be nice to have some sort of unit for time
+TimeResource = HttpResource("http://time.jsontest.com")
+
+CurrentTime = Json(TimeResource).time

@@ -76,6 +76,16 @@ class ParseTest {
     fun stringLiterals(input: String) = parseTest(input)
 
     @ParameterizedTest
+    @ValueSource(strings = [
+        """
+            // Comment
+            Val = 1 + 1 // Another comment
+            Another = 2 - 2
+        """
+    ])
+    fun comments(input: String) = parseTest(input)
+
+    @ParameterizedTest
     @ValueSource(strings = ["."])
     fun testDoesNotParse(input: String) = parseFailTest(input)
 

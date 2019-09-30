@@ -1,5 +1,9 @@
 lexer grammar CarbonLexer;
 
+COMMENT
+    : '//' (~[\r\n])* -> skip
+    ;
+
 WS: [ ] -> skip;
 NL: [\r\n];
 
