@@ -1,0 +1,2 @@
+#Sample(1000) // It would be nice to have some sort of unit for time
+TimeString = HttpResource("GET", "https://postman-echo.com/time/now").ResponseBody
