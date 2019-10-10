@@ -36,6 +36,14 @@ private object ExpressionVisitor : CarbonParserBaseVisitor<CarbonSyntax>() {
         return CallSyntax(formalParameters, base)
     }
 
+    override fun visitOperatorExpr(ctx: CarbonParser.OperatorExprContext): CarbonSyntax {
+        val lhs = visit(ctx.lhs)
+        val rhs = visit(ctx.rhs)
+        val operator = ctx.operator.text
+
+        return CallSyntax(listOf(rhs), AccessorSyntax(lhs, operator))
+    }
+
     override fun visitCompositeExpr(ctx: CarbonParser.CompositeExprContext): CarbonSyntax {
         val values = ctx.expressionBody().definitions
             .filterIsInstance<CarbonParser.DeclarationContext>()
@@ -49,14 +57,20 @@ private object ExpressionVisitor : CarbonParserBaseVisitor<CarbonSyntax>() {
         else
             FunctionSyntax(parameters, CompositeSyntax(values))
     }
+}
 
-    override fun visitOperatorExpr(ctx: CarbonParser.OperatorExprContext): CarbonSyntax {
-        val lhs = visit(ctx.lhs)
-        val rhs = visit(ctx.rhs)
-        val operator = ctx.operator.text
+private fun visitCompositeBody(definitions: Collection<CarbonParser.DefinitionContext>) : CompositeSyntax {
+    val values = definitions
+        .filterIsInstance<CarbonParser.DeclarationContext>()
+        .associateBy({ it.name.text }, { ExpressionVisitor.visit(it) })
+    val parameters = definitions
+        .filterIsInstance<CarbonParser.ParameterContext>()
+        .map { it.param().name.text }
 
-        return CallSyntax(listOf(rhs), AccessorSyntax(lhs, operator))
-    }
+    return if (parameters.isEmpty())
+        CompositeSyntax(values)
+    else
+        FunctionSyntax(parameters, CompositeSyntax(values))
 }
 
 private fun buildComposite(definitions: Collection<CarbonParser.DefinitionContext>, lexicalScope: CarbonObject) : Composite {

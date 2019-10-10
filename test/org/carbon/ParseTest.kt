@@ -60,7 +60,8 @@ class ParseTest {
         """
             Val = 1 + 1
             Another = 2 - 2
-        """
+        """,
+        "Val = 1 < 2"
     ])
     fun operators(input: String) = parseTest(input)
 
@@ -84,6 +85,16 @@ class ParseTest {
         """
     ])
     fun comments(input: String) = parseTest(input)
+
+    @ParameterizedTest
+    @ValueSource(strings = [
+        """
+            Sign(A : Integer)
+                | A < 0 = -1
+                = 1
+        """
+    ])
+    fun conditional(input: String) = parseTest(input)
 
     @ParameterizedTest
     @ValueSource(strings = ["."])

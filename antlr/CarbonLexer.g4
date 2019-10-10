@@ -14,11 +14,13 @@ L_PAREN: '(';
 R_PAREN: ')';
 L_CURLY: '{';
 R_CURLY: '}';
+PIPE: '|';
 
 DIGIT : [0-9];
 LETTER: [a-zA-Z];
-OPERATOR1: '+';
-OPERATOR2: '*' | '/';
+OPERATOR1: '<' | '>' | '=';
+OPERATOR2: '+';
+OPERATOR3: '*' | '/';
 MINUS: '-';
 DOT: '.';
 
