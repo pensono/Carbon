@@ -1,6 +1,6 @@
 package org.carbon.runtime
 
-// Not sure if this interface is the right way to abstract this
-interface Callable {
-    fun call(arguments: List<CarbonObject>) : CarbonObject
+abstract class Callable : CarbonObject() {
+    override fun evaluate(): CarbonObject = this
+    abstract fun apply(arguments: List<CarbonObject>) : CarbonObject
 }

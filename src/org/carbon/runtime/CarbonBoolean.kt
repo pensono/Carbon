@@ -1,8 +1,7 @@
 package org.carbon.runtime
 
 
-class CarbonBoolean(val value: Boolean) : CarbonObject() {
-    override fun lookupName(name: String): CarbonObject? = getMember(name) // Should this actually do some work with the scope?
+class CarbonBoolean(val value: Boolean) : Composite() {
     override fun getMember(name: String): CarbonObject? =
         when (name) {
             "&" -> BoolFunction(value, Boolean::and)
@@ -15,11 +14,8 @@ class CarbonBoolean(val value: Boolean) : CarbonObject() {
     override fun hashCode(): Int = value.hashCode()
 }
 
-private class BoolFunction(val rhs: Boolean, val function: (Boolean, Boolean) -> Boolean) : CarbonObject(), Callable {
-    override fun lookupName(name: String): CarbonObject? = null
-    override fun getMember(name: String): CarbonObject? = null
-
-    override fun call(arguments: List<CarbonObject>): CarbonObject {
+private class BoolFunction(val rhs: Boolean, val function: (Boolean, Boolean) -> Boolean) : Callable() {
+    override fun apply(arguments: List<CarbonObject>): CarbonObject {
         assert(arguments.size == 1)
 
         val lhs = arguments[0] as CarbonBoolean

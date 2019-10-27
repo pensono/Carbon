@@ -1,10 +1,9 @@
 package org.carbon.syntax
 
-import org.carbon.runtime.CarbonObject
 import org.carbon.runtime.Composite
 
 class CompositeSyntax(val values: Map<String, CarbonSyntax>) : CarbonSyntax() {
-    override fun evaluate(scope: CarbonObject): Composite {
+    override fun performLink(scope: Composite): Composite {
         return Composite(values, scope)
     }
 }

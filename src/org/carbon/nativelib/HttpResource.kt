@@ -1,17 +1,14 @@
 package org.carbon.nativelib
 
 import org.carbon.runtime.Callable
-import org.carbon.runtime.CarbonInteger
 import org.carbon.runtime.CarbonObject
 import org.carbon.runtime.CarbonString
+import org.carbon.runtime.Composite
 import java.net.HttpURLConnection
 import java.net.URL
 
-object HttpResourceConstructor : CarbonObject(), Callable {
-    override fun lookupName(name: String): CarbonObject? = getMember(name) // Should this actually do some work with the scope?
-    override fun getMember(name: String): CarbonObject? = null
-
-    override fun call(arguments: List<CarbonObject>): CarbonObject {
+object HttpResourceConstructor : Callable() {
+    override fun apply(arguments: List<CarbonObject>): CarbonObject {
         assert(arguments.size == 2 || arguments.size == 3)
 
         val method = arguments[0] as CarbonString
@@ -21,7 +18,7 @@ object HttpResourceConstructor : CarbonObject(), Callable {
     }
 }
 
-class HttpResource(val method: String, val url: String) : CarbonObject() {
+class HttpResource(val method: String, val url: String) : Composite() {
     val body: String
 
     init {
@@ -32,7 +29,6 @@ class HttpResource(val method: String, val url: String) : CarbonObject() {
         body = String(bytes)
     }
 
-    override fun lookupName(name: String): CarbonObject? = getMember(name) // Should this actually do some work with the scope?
     override fun getMember(name: String): CarbonObject? =
         when (name) {
             "ResponseBody" -> CarbonString(body)

@@ -1,8 +1,7 @@
 package org.carbon.runtime
 
 
-class CarbonInteger(val value: Int) : CarbonObject() {
-    override fun lookupName(name: String): CarbonObject? = getMember(name) // Should this actually do some work with the scope?
+class CarbonInteger(val value: Int) : Composite() {
     override fun getMember(name: String): CarbonObject? =
         when (name) {
             "+" -> IntFunction(value, Int::plus)
@@ -16,11 +15,8 @@ class CarbonInteger(val value: Int) : CarbonObject() {
     override fun hashCode(): Int = value
 }
 
-private class IntFunction(val rhs: Int, val function: (Int, Int) -> Int) : CarbonObject(), Callable {
-    override fun lookupName(name: String): CarbonObject? = null
-    override fun getMember(name: String): CarbonObject? = null
-
-    override fun call(arguments: List<CarbonObject>): CarbonObject {
+private class IntFunction(val rhs: Int, val function: (Int, Int) -> Int) : Callable() {
+    override fun apply(arguments: List<CarbonObject>): CarbonObject {
         assert(arguments.size == 1)
 
         val lhs = arguments[0] as CarbonInteger

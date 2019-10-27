@@ -59,7 +59,7 @@ private object ExpressionVisitor : CarbonParserBaseVisitor<CarbonSyntax>() {
     }
 }
 
-private fun visitCompositeBody(definitions: Collection<CarbonParser.DefinitionContext>) : CompositeSyntax {
+private fun visitCompositeBody(definitions: Collection<CarbonParser.DefinitionContext>) : CarbonSyntax {
     val values = definitions
         .filterIsInstance<CarbonParser.DeclarationContext>()
         .associateBy({ it.name.text }, { ExpressionVisitor.visit(it) })
@@ -73,7 +73,7 @@ private fun visitCompositeBody(definitions: Collection<CarbonParser.DefinitionCo
         FunctionSyntax(parameters, CompositeSyntax(values))
 }
 
-private fun buildComposite(definitions: Collection<CarbonParser.DefinitionContext>, lexicalScope: CarbonObject) : Composite {
+private fun buildComposite(definitions: Collection<CarbonParser.DefinitionContext>, lexicalScope: Composite) : Composite {
     val values = definitions.filterIsInstance<CarbonParser.DeclarationContext>()
         .associateBy({ it.name.text }, { declaration ->
             val body = ExpressionVisitor.visit(declaration)

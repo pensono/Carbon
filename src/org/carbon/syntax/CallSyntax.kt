@@ -2,13 +2,14 @@ package org.carbon.syntax
 
 import org.carbon.runtime.Callable
 import org.carbon.runtime.CarbonObject
+import org.carbon.runtime.Composite
 
 class CallSyntax(val actualParameters: List<CarbonSyntax>, val base: CarbonSyntax) : CarbonSyntax() {
-    override fun evaluate(scope: CarbonObject): CarbonObject {
-        val evaluatedBase = base.evaluate(scope) as Callable
-        val arguments = actualParameters.map { it.evaluate(scope) }
+    override fun performLink(scope: Composite): CarbonObject {
+        val evaluatedBase = base.performLink(scope) as Callable
+        val arguments = actualParameters.map { it.performLink(scope) }
 
-        return evaluatedBase.call(arguments)
+        return evaluatedBase.apply(arguments)
     }
 
     override fun toString(): String = "$base(${actualParameters.map { it.toString() }.joinToString(", ")})"

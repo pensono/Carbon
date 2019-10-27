@@ -111,16 +111,16 @@ class EvaluateTest {
         assertEquals(wrap(5), value)
     }
 
-    @Test
-    fun conditional() {
-        val exprs = evaluate("""
-            Sign(A : Integer) 
-              | A < 0 = -1
-              = 1
-            PosCase = Sign(5)
-            NegCase = Sign(-5)
-        """)
-        assertEquals(wrap(1), exprs.getMember("PosCase"))
-        assertEquals(wrap(-1), exprs.getMember("NegCase"))
-    }
+//    @Test
+//    fun conditional() {
+//        val exprs = evaluate("""
+//            Sign(A : Integer)
+//              | A < 0 = -1
+//              = 1
+//            PosCase = Sign(5)
+//            NegCase = Sign(-5)
+//        """)
+//        assertEquals(wrap(1), exprs.getMember("PosCase"))
+//        assertEquals(wrap(-1), exprs.getMember("NegCase"))
+//    }
 }
