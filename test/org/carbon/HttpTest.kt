@@ -1,8 +1,10 @@
 package org.carbon
 
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
+@Disabled
 class HttpTest {
     @Test
     fun echoTest() {

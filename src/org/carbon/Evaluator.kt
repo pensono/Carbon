@@ -6,7 +6,7 @@ import org.carbon.syntax.*
 fun evaluate(program: String) : Composite {
     val parsed = parseFile(program) ?: error("Parse failed")
 
-    return buildComposite(parsed.definitions, RootScope)
+    return visitCompositeBody(parsed.definitions).link(RootScope) as Composite
 }
 
 private object ExpressionVisitor : CarbonParserBaseVisitor<CarbonSyntax>() {
@@ -29,6 +29,16 @@ private object ExpressionVisitor : CarbonParserBaseVisitor<CarbonSyntax>() {
         return AccessorSyntax(base, ctx.name.text)
     }
 
+    override fun visitDeclaration(ctx: CarbonParser.DeclarationContext): CarbonSyntax {
+        val body = visit(ctx.body)
+        return if (ctx.parameterList() == null)
+            body
+        else {
+            val formalParameters = ctx.parameterList().parameters.map { it.name.text }
+            FunctionSyntax(formalParameters, body)
+        }
+    }
+
     override fun visitCallExpr(ctx: CarbonParser.CallExprContext): CarbonSyntax {
         val formalParameters = ctx.argumentList().parameters.map { visit(it) }
         val base = visit(ctx.base)
@@ -45,17 +55,7 @@ private object ExpressionVisitor : CarbonParserBaseVisitor<CarbonSyntax>() {
     }
 
     override fun visitCompositeExpr(ctx: CarbonParser.CompositeExprContext): CarbonSyntax {
-        val values = ctx.expressionBody().definitions
-            .filterIsInstance<CarbonParser.DeclarationContext>()
-            .associateBy({ it.name.text }, { visit(it) })
-        val parameters = ctx.expressionBody().definitions
-            .filterIsInstance<CarbonParser.ParameterContext>()
-            .map { it.param().name.text }
-
-        return if (parameters.isEmpty())
-            CompositeSyntax(values)
-        else
-            FunctionSyntax(parameters, CompositeSyntax(values))
+        return visitCompositeBody(ctx.expressionBody().definitions)
     }
 }
 
@@ -71,19 +71,4 @@ private fun visitCompositeBody(definitions: Collection<CarbonParser.DefinitionCo
         CompositeSyntax(values)
     else
         FunctionSyntax(parameters, CompositeSyntax(values))
-}
-
-private fun buildComposite(definitions: Collection<CarbonParser.DefinitionContext>, lexicalScope: Composite) : Composite {
-    val values = definitions.filterIsInstance<CarbonParser.DeclarationContext>()
-        .associateBy({ it.name.text }, { declaration ->
-            val body = ExpressionVisitor.visit(declaration)
-            if (declaration.parameterList() == null)
-                body
-            else {
-                val formalParameters = declaration.parameterList().parameters.map { it.name.text }
-                FunctionSyntax(formalParameters, body)
-            }
-        })
-
-    return Composite(values, lexicalScope)
 }

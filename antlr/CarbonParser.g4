@@ -21,7 +21,7 @@ expressionBody
     ;
 
 definition
-    : name=identifier parameterList? NL* (PIPE conditions+=expression NL* EQUALS NL* condition_vals+=expression NL*)* EQUALS NL* expression # Declaration
+    : name=identifier parameterList? NL* (PIPE conditions+=expression NL* EQUALS NL* condition_vals+=expression NL*)* EQUALS NL* body=expression # Declaration
     | param # Parameter
     ;
 
