@@ -1,11 +1,11 @@
 package org.carbon
 
-import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-@Disabled
 class HttpTest {
+    @Tag("external")
     @Test
     fun echoTest() {
         // TODO make this not rely on an external dependency

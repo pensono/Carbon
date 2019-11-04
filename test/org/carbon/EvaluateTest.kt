@@ -133,4 +133,16 @@ class EvaluateTest {
         assertEquals(wrap(1), exprs.getMember("PosCase"))
         assertEquals(wrap(-1), exprs.getMember("NegCase"))
     }
+
+    @Test
+    fun recursion() {
+        val exprs = evaluate("""
+            Fib(A : Integer)
+              | A < 1 = 0
+              | A < 3 = 1
+              = Fib(A - 1) + Fib (A - 2)
+            R = Fib(10)
+        """)
+        assertEquals(wrap(55), exprs.getMember("R"))
+    }
 }
