@@ -102,6 +102,16 @@ class EvaluateTest {
     }
 
     @Test
+    fun doubleFunctionCall() {
+        val value = evaluate("""
+            PlusOne(A : Integer) = A + 1
+            PlusTwo(B : Integer) = PlusOne(B + 1)
+            R = PlusTwo(5)
+        """).getMember("R")
+        assertEquals(wrap(7), value)
+    }
+
+    @Test
     fun functionCanReferToOuterScope() {
         val value = evaluate("""
             OuterVar = 5
@@ -111,16 +121,16 @@ class EvaluateTest {
         assertEquals(wrap(5), value)
     }
 
-//    @Test
-//    fun conditional() {
-//        val exprs = evaluate("""
-//            Sign(A : Integer)
-//              | A < 0 = -1
-//              = 1
-//            PosCase = Sign(5)
-//            NegCase = Sign(-5)
-//        """)
-//        assertEquals(wrap(1), exprs.getMember("PosCase"))
-//        assertEquals(wrap(-1), exprs.getMember("NegCase"))
-//    }
+    @Test
+    fun conditional() {
+        val exprs = evaluate("""
+            Sign(A : Integer)
+              | A < 0 = -1
+              = 1
+            PosCase = Sign(5)
+            NegCase = Sign(-5)
+        """)
+        assertEquals(wrap(1), exprs.getMember("PosCase"))
+        assertEquals(wrap(-1), exprs.getMember("NegCase"))
+    }
 }

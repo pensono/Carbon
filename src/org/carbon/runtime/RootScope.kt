@@ -2,7 +2,7 @@ package org.carbon.runtime
 
 import org.carbon.nativelib.HttpResourceConstructor
 
-object RootScope : Composite(mapOf(), null) {
+object RootScope : Composite() {
     // For now just dump everything in the root scope
     private val members = mapOf<String, CarbonObject>(
         "HttpResource" to HttpResourceConstructor

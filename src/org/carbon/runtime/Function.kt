@@ -1,8 +1,10 @@
 package org.carbon.runtime
 
-import org.carbon.syntax.CarbonSyntax
+open class Function(val parameters: List<String>, val body: CarbonObject, var lexicalScope: Composite?) : Callable() {
+    override fun setScope(lexicalScope: Composite) {
+        this.lexicalScope = lexicalScope
+    }
 
-open class Function(val parameters: List<String>, val body: CarbonSyntax, val lexicalScope: Composite) : Callable() {
     override fun apply(arguments: List<CarbonObject>) : CarbonObject {
         assert(parameters.size == arguments.size)
 
@@ -13,6 +15,6 @@ open class Function(val parameters: List<String>, val body: CarbonSyntax, val le
             override fun getMember(name: String) : CarbonObject? = argumentMapping[name]
         }
 
-        return body.performLink(functionScope)
+        return body.evaluate(functionScope)
     }
 }

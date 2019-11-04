@@ -4,10 +4,10 @@ import org.carbon.runtime.Callable
 import org.carbon.runtime.CarbonObject
 import org.carbon.runtime.Composite
 
-class CallSyntax(val actualParameters: List<CarbonSyntax>, val base: CarbonSyntax) : CarbonSyntax() {
-    override fun performLink(scope: Composite): CarbonObject {
-        val evaluatedBase = base.performLink(scope) as Callable
-        val arguments = actualParameters.map { it.performLink(scope) }
+class CallSyntax(val actualParameters: List<CarbonObject>, val base: CarbonObject) : CarbonSyntax() {
+    override fun evaluate(scope: Composite): CarbonObject {
+        val evaluatedBase = base.evaluate(scope) as Callable
+        val arguments = actualParameters.map { it.evaluate(scope) }
 
         return evaluatedBase.apply(arguments)
     }

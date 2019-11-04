@@ -1,23 +1,24 @@
 package org.carbon.runtime
 
-import org.carbon.syntax.CarbonSyntax
-
 // No parameters for now
-open class Composite(val values: Map<String, CarbonSyntax> = mapOf(), val lexicalScope: Composite? = null) : CarbonObject() {
-    override fun evaluate(): CarbonObject = this
+open class Composite(val values: Map<String, CarbonObject> = mapOf(), var lexicalScope: Composite? = null) : CarbonObject() {
+    override fun evaluate(scope: Composite): CarbonObject = this
 
-    private val evaluatedValues : MutableMap<String, CarbonObject> = mutableMapOf()
     private val inputs: Map<String, CarbonObject> = mutableMapOf()
+
+    override fun setScope(lexicalScope: Composite) {
+        this.lexicalScope = lexicalScope
+        values.values.forEach { it.setScope(this) }
+    }
 
     fun lookupName(name: String): CarbonObject? = getMember(name) ?: lexicalScope?.lookupName(name)
     open fun getMember(name: String): CarbonObject? {
-        if (evaluatedValues.containsKey(name)) {
-            return evaluatedValues.getValue(name)
+        if (values.containsKey(name)) {
+            // No caching is done here. The entire computation graph is worked out at every step
+            return values.getValue(name).evaluate(this)
         } else {
-            // Lazy evaluation. Let's see how this works out
-            val evaluatedValue = values[name]?.performLink(this) ?: return null
-            evaluatedValues[name] = evaluatedValue
-            return evaluatedValue
+            // We don't have this member
+            return null
         }
     }
 
