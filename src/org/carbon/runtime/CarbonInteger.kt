@@ -1,12 +1,12 @@
 package org.carbon.runtime
 
 
-class CarbonInteger(var value: Int) : Composite() {
+class CarbonInteger(var value: Long) : Composite() {
     override fun getMember(name: String): CarbonObject? =
         when (name) {
-            "+" -> IntMagma(Int::plus)
-            "-" -> IntMagma(Int::minus)
-            "*" -> IntMagma(Int::times)
+            "+" -> IntMagma(Long::plus)
+            "-" -> IntMagma(Long::minus)
+            "*" -> IntMagma(Long::times)
             "<" -> IntRelation { a, b -> a < b }
             ">" -> IntRelation { a, b -> a > b }
             else -> null
@@ -14,9 +14,9 @@ class CarbonInteger(var value: Int) : Composite() {
 
     override fun toString(): String = "Integer($value)"
     override fun equals(other: Any?) = other is CarbonInteger && other.value == value
-    override fun hashCode(): Int = value
+    override fun hashCode(): Int = value.hashCode()
 
-    private inner class IntMagma(val function: (Int, Int) -> Int) : Callable() {
+    private inner class IntMagma(val function: (Long, Long) -> Long) : Callable() {
         override fun apply(arguments: List<CarbonObject>): CarbonObject {
             assert(arguments.size == 1)
 
@@ -26,7 +26,7 @@ class CarbonInteger(var value: Int) : Composite() {
         }
     }
 
-    private inner class IntRelation(val function: (Int, Int) -> Boolean) : Callable() {
+    private inner class IntRelation(val function: (Long, Long) -> Boolean) : Callable() {
         override fun apply(arguments: List<CarbonObject>): CarbonObject {
             assert(arguments.size == 1)
 

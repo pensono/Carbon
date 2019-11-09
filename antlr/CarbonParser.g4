@@ -21,7 +21,7 @@ expressionBody
     ;
 
 definition
-    : name=identifier parameterList? NL* (PIPE conditions+=expression NL* EQUALS NL* condition_vals+=expression NL*)* EQUALS NL* body=expression # Declaration
+    : (annotations+=annotation NL+)* name=identifier parameterList? NL* (PIPE conditions+=expression NL* EQUALS NL* condition_vals+=expression NL*)* EQUALS NL* body=expression # Declaration
     | param # Parameter
     ;
 
@@ -34,6 +34,10 @@ parameterList
     ;
 
 param : name=expression (NL* COLON NL* type=expression)?;
+
+annotation
+    : OCTOTHORPE expression
+    ;
 
 identifier
     : LETTER (DIGIT | LETTER)*

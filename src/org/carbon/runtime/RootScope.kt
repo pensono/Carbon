@@ -1,11 +1,12 @@
 package org.carbon.runtime
 
-import org.carbon.nativelib.HttpResourceConstructor
+import org.carbon.nativelib.*
 
 object RootScope : Composite() {
     // For now just dump everything in the root scope
     private val members = mapOf<String, CarbonObject>(
-        "HttpResource" to HttpResourceConstructor
+        "HttpResource" to HttpResourceConstructor,
+        "Memoize" to MemoizeAnnotation
     )
 
     override fun getMember(name: String): CarbonObject? = members[name]

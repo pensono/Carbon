@@ -23,6 +23,7 @@ OPERATOR2: '+';
 OPERATOR3: '*' | '/';
 MINUS: '-';
 DOT: '.';
+OCTOTHORPE: '#';
 
 QUOTE_OPEN: '"' -> pushMode(StringLiteral);
 

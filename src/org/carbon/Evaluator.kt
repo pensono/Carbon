@@ -12,7 +12,7 @@ fun evaluate(program: String) : Composite {
 private class ExpressionVisitor(val lexicalScope: Composite) : CarbonParserBaseVisitor<CarbonObject>() {
     override fun visitNumberLiteral(ctx: CarbonParser.NumberLiteralContext): CarbonObject {
         val value = Integer.parseInt(ctx.text)
-        return CarbonInteger(value)
+        return CarbonInteger(value.toLong())
     }
 
     override fun visitStringLiteral(ctx: CarbonParser.StringLiteralContext): CarbonObject {
@@ -38,12 +38,20 @@ private class ExpressionVisitor(val lexicalScope: Composite) : CarbonParserBaseV
             body = ConditionSyntax(testSyntax, bodySyntax, body)
         }
 
-        return if (ctx.parameterList() == null)
+        body = if (ctx.parameterList() == null)
             body
         else {
             val formalParameters = ctx.parameterList().parameters.map { it.name.text }
             Function(formalParameters, body, lexicalScope)
         }
+
+        for (annotationSyntax in ctx.annotations) {
+            // What scope to pass here?
+            val annotation = visit(annotationSyntax).evaluate(RootScope) as Callable
+            body = annotation.apply(listOf(body))
+        }
+
+        return body
     }
 
     override fun visitCallExpr(ctx: CarbonParser.CallExprContext): CarbonObject {

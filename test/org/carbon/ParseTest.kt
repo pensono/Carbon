@@ -97,6 +97,15 @@ class ParseTest {
     fun conditional(input: String) = parseTest(input)
 
     @ParameterizedTest
+    @ValueSource(strings = [
+        """
+            #TestAnnotation
+            Const(A : Integer) = 1
+        """
+    ])
+    fun annotation(input: String) = parseTest(input)
+
+    @ParameterizedTest
     @ValueSource(strings = ["."])
     fun testDoesNotParse(input: String) = parseFailTest(input)
 
