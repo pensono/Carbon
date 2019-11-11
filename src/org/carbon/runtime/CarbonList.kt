@@ -5,7 +5,7 @@ class CarbonList(val elements : List<CarbonObject>) : Composite() {
         when (name) {
             ":" -> MapFunction
             "+" -> ListMagma { a, b -> a + b }
-            "Count" -> CarbonInteger(elements.size.toLong())
+            "Length" -> CarbonInteger(elements.size.toLong())
             else -> null
         }
 

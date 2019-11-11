@@ -40,5 +40,14 @@ class StringTest {
         assertEquals(wrap("Hello there"), result.getMember("A"))
     }
 
+    @Test
+    fun lengthTest() {
+        val result = evaluate(
+            """
+            A = "Hello".Length
+        """)
+        assertEquals(wrap(5), result.getMember("A"))
+    }
+
     // TODO Full UTF-8 support
 }

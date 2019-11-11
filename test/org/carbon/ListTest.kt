@@ -26,9 +26,9 @@ class ListTest {
 
     @ParameterizedTest
     @ValueSource(strings = [
-        "A = [].Count, E = 0",
-        "A = [2].Count, E = 1",
-        "A = [1, 2, 3].Count, E = 3"
+        "A = [].Length, E = 0",
+        "A = [2].Length, E = 1",
+        "A = [1, 2, 3].Length, E = 3"
     ])
     fun count(program: String) {
         val result = evaluate(program)

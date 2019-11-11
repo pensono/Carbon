@@ -5,6 +5,7 @@ class CarbonString(val value: String) : Composite() {
     override fun getMember(name: String): CarbonObject? =
         when (name) {
             "+" -> StringFunction(value, String::plus)
+            "Length" -> CarbonInteger(value.length.toLong())
             else -> null
         }
 
