@@ -106,6 +106,38 @@ class ParseTest {
     fun annotation(input: String) = parseTest(input)
 
     @ParameterizedTest
+    @ValueSource(strings = [
+        "R = []",
+        "R = [1]",
+        "R = [1,2,3]",
+        "R = [1,2,3,]",
+        """
+            R = [
+                ]
+        """,
+        """
+            R = [
+                    1
+                ]
+        """,
+        """
+            R = [
+                    1,
+                    2,
+                    3
+                ]
+        """,
+        """
+            R = [
+                    1,
+                    2,
+                    3,
+                ]
+        """
+    ])
+    fun list(input: String) = parseTest(input)
+
+    @ParameterizedTest
     @ValueSource(strings = ["."])
     fun testDoesNotParse(input: String) = parseFailTest(input)
 

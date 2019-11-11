@@ -20,6 +20,11 @@ private class ExpressionVisitor(val lexicalScope: Composite) : CarbonParserBaseV
         return CarbonString(ctx.content?.text ?: "")
     }
 
+    override fun visitListExpr(ctx: CarbonParser.ListExprContext): CarbonObject {
+        val elements = ctx.elements.map { visit(it) }
+        return CarbonList(elements)
+    }
+
     override fun visitIdentifierExpr(ctx: CarbonParser.IdentifierExprContext): CarbonObject {
         return IdentifierSyntax(ctx.identifier().text)
     }

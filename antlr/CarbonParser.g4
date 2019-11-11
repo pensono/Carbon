@@ -11,6 +11,7 @@ expression
     | lhs=expression operator=(OPERATOR2 | MINUS) rhs=expression # OperatorExpr
     | lhs=expression operator=OPERATOR1 rhs=expression # OperatorExpr
     | base=expression DOT name=identifier # AccessorExpr
+    | L_BRACKET NL* (elements+= expression COMMA? NL*)* NL* R_BRACKET # ListExpr // Comma placement here valid?
     | MINUS? DIGIT+ # NumberLiteral
     | QUOTE_OPEN content=LITERAL_TEXT? QUOTE_CLOSE # StringLiteral
     | identifier # IdentifierExpr

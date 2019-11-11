@@ -1,8 +1,5 @@
 package org.carbon
 
-import org.carbon.runtime.CarbonInteger
-import org.carbon.runtime.CarbonObject
-import org.carbon.runtime.Composite
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource

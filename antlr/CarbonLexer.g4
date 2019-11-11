@@ -14,6 +14,8 @@ L_PAREN: '(';
 R_PAREN: ')';
 L_CURLY: '{';
 R_CURLY: '}';
+L_BRACKET: '[';
+R_BRACKET: ']';
 PIPE: '|';
 
 DIGIT : [0-9];
