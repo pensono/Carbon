@@ -51,9 +51,12 @@ private class ExpressionVisitor(val lexicalScope: Composite) : CarbonParserBaseV
         }
 
         for (annotationSyntax in ctx.annotations) {
+            // Should the declaration itself be returned by this visitor?
+            val declarationSyntax = DeclarationSyntax(ctx.name.text, body)
+
             // What scope to pass here?
             val annotation = visit(annotationSyntax).evaluate(RootScope) as Callable
-            body = annotation.apply(listOf(body))
+            body = annotation.apply(listOf(declarationSyntax))
         }
 
         return body

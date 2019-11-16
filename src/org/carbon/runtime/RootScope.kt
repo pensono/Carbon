@@ -6,7 +6,8 @@ object RootScope : Composite() {
     // For now just dump everything in the root scope
     private val members = mapOf<String, CarbonObject>(
         "HttpResource" to HttpResourceConstructor,
-        "Memoize" to MemoizeAnnotation
+        "Memoize" to MemoizeAnnotation,
+        "TailCall" to TailCallAnnotation
     )
 
     override fun getMember(name: String): CarbonObject? = members[name]

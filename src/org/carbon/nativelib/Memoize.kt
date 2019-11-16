@@ -3,12 +3,14 @@ package org.carbon.nativelib
 import org.carbon.runtime.Callable
 import org.carbon.runtime.CarbonObject
 import org.carbon.runtime.Composite
+import org.carbon.syntax.DeclarationSyntax
 
 object MemoizeAnnotation : Callable() {
     override fun apply(arguments: List<CarbonObject>): CarbonObject {
         assert(arguments.size == 1)
 
-        val syntax = arguments[0] as Callable
+        val declaration = arguments[0] as DeclarationSyntax
+        val syntax = declaration.body as Callable
 
         return MemoizedFunction(syntax)
     }

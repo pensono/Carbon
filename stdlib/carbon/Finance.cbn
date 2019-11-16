@@ -7,8 +7,8 @@ Loan(Currency) = {
     Apr: Ratio,
 
     // Do something to add units to these?
-    PeriodsPerYear: Integer[> 0]
-    DurationYears: Integer[> 0]
+    PeriodsPerYear: Integer[it > 0]
+    DurationYears: Integer[it > 0]
     PeriodCount = DurationYears * PaymentsPerYear
 
     RatePerPeriod = Apr / PeriodsPerYear

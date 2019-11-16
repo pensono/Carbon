@@ -8,7 +8,7 @@ open class Function(val parameters: List<String>, val body: CarbonObject, var le
     override fun apply(arguments: List<CarbonObject>) : CarbonObject {
         assert(parameters.size == arguments.size)
 
-        val argumentMapping = parameters.zip(arguments).associateBy({ it.first }, { it.second })
+        val argumentMapping = parameters.zip(arguments).associate { it }
 
         // Wraps around the outer scope
         val functionScope = object : Composite(mapOf(), lexicalScope) {
