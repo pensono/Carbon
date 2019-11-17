@@ -1,4 +1,4 @@
-package org.carbon
+package org.carbon.intrepreter
 
 import org.carbon.runtime.CarbonInteger
 import org.carbon.runtime.CarbonList

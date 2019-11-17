@@ -1,6 +1,6 @@
-package org.carbon
+package org.carbon.intrepreter
 
-import org.junit.jupiter.api.Test
+import org.carbon.evaluate
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.assertEquals

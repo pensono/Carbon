@@ -1,5 +1,6 @@
-package org.carbon
+package org.carbon.intrepreter
 
+import org.carbon.evaluate
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -9,7 +10,8 @@ class StringTest {
         val result = evaluate(
             """
             A = "Hello" 
-        """)
+        """
+        )
         assertEquals(wrap("Hello"), result.getMember("A"))
     }
 
@@ -18,7 +20,8 @@ class StringTest {
         val result = evaluate(
             """
             A = "  Hel lo  " 
-        """)
+        """
+        )
         assertEquals(wrap("  Hel lo  "), result.getMember("A"))
     }
 
@@ -27,7 +30,8 @@ class StringTest {
         val result = evaluate(
             """
             A = "" 
-        """)
+        """
+        )
         assertEquals(wrap(""), result.getMember("A"))
     }
 
@@ -36,7 +40,8 @@ class StringTest {
         val result = evaluate(
             """
             A = "Hello " + "there"
-        """)
+        """
+        )
         assertEquals(wrap("Hello there"), result.getMember("A"))
     }
 
@@ -45,7 +50,8 @@ class StringTest {
         val result = evaluate(
             """
             A = "Hello".Length
-        """)
+        """
+        )
         assertEquals(wrap(5), result.getMember("A"))
     }
 
