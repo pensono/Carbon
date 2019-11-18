@@ -6,7 +6,7 @@
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="tags" />
     <option name="PARAMETERS" value="" />
-    <tag value="!external" />
+    <tag value="!external &amp; !unreliable" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

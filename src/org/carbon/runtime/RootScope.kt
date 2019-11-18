@@ -7,9 +7,11 @@ private val rootMembers = mapOf<String, CarbonObject>(
     "HttpResource" to HttpResourceConstructor,
     "Memoize" to MemoizeAnnotation,
     "TailCall" to TailCallAnnotation,
-    "CurrentTime" to CurrentTime
+    "CurrentTime" to CurrentTime,
+    "Sample" to SampleConstructor
 )
 
-object RootScope : Composite(rootMembers) {
+object RootScope : Composite() {
     override fun toString(): String = "RootScope"
+    override fun getMember(name: String): CarbonObject? = rootMembers[name]
 }

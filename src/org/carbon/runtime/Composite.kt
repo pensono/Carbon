@@ -1,14 +1,14 @@
 package org.carbon.runtime
 
 // No parameters for now
-open class Composite(val members: Map<String, CarbonObject> = mapOf(), var lexicalScope: Composite? = null) : CarbonObject() {
-    override fun evaluate(scope: Composite): CarbonObject = this
-
+open class Composite(var lexicalScope: Composite? = null) : CarbonObject() {
+    private val members: MutableMap<String, CarbonObject> = mutableMapOf()
     private val inputs: Map<String, CarbonObject> = mutableMapOf()
 
-    override fun setScope(lexicalScope: Composite) {
-        this.lexicalScope = lexicalScope
-        members.values.forEach { it.setScope(this) }
+    override fun evaluate(scope: Composite): CarbonObject = this
+
+    fun addMember(name: String, member: CarbonObject) {
+        members[name] = member
     }
 
     fun lookupName(name: String): CarbonObject? = getMember(name) ?: lexicalScope?.lookupName(name)

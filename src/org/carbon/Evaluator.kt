@@ -52,7 +52,7 @@ private class ExpressionVisitor(val lexicalScope: Composite) : CarbonParserBaseV
 
         for (annotationSyntax in ctx.annotations) {
             // Should the declaration itself be returned by this visitor?
-            val declarationSyntax = DeclarationSyntax(ctx.name.text, body)
+            val declarationSyntax = DeclarationSyntax(ctx.name.text, body, lexicalScope)
 
             // What scope to pass here?
             val annotation = visit(annotationSyntax).evaluate(RootScope) as Callable
@@ -83,22 +83,40 @@ private class ExpressionVisitor(val lexicalScope: Composite) : CarbonParserBaseV
 }
 
 private fun visitCompositeBody(definitions: Collection<CarbonParser.DefinitionContext>, lexicalScope: Composite) : CarbonObject {
-    val values = definitions
-        .filterIsInstance<CarbonParser.DeclarationContext>()
-        .associateBy({ it.name.text }, { ExpressionVisitor(lexicalScope).visit(it) })
     val parameters = definitions
         .filterIsInstance<CarbonParser.ParameterContext>()
         .map { it.param().name.text }
 
     return if (parameters.isEmpty()) {
-        val composite = Composite(values, lexicalScope)
-        values.values.forEach{ it.setScope(composite) }
-        composite
-    } else {
-        val body = object : CarbonObject() {
-            override fun evaluate(scope: Composite): CarbonObject = Composite(values, scope)
+        val composite = Composite(lexicalScope)
+        val values = definitions
+            .filterIsInstance<CarbonParser.DeclarationContext>()
+            .associateBy({ it.name.text }, { ExpressionVisitor(composite).visit(it) })
+
+        // Raw loop, lame
+        for ((name, value) in values) {
+            composite.addMember(name, value)
         }
 
-        Function(parameters, body, lexicalScope)
+        composite
+    } else {
+        // It's kinda annoying to duplicate the function call logic here
+        object : Callable() {
+            override fun apply(arguments: List<CarbonObject>): CarbonObject {
+                val argumentMapping = parameters.zip(arguments).associate { it }
+
+                val composite = Composite(lexicalScope)
+                val values = definitions
+                    .filterIsInstance<CarbonParser.DeclarationContext>()
+                    .associateBy({ it.name.text }, { ExpressionVisitor(composite).visit(it) })
+
+                // Raw loop, lame
+                for ((name, value) in values + argumentMapping) {
+                    composite.addMember(name, value)
+                }
+
+                return composite
+            }
+        }
     }
 }

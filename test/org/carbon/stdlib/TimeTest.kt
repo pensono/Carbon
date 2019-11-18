@@ -1,8 +1,11 @@
 package org.carbon.stdlib
 
 import org.carbon.evaluate
+import org.carbon.intrepreter.unwrap
 import org.carbon.runtime.CarbonInteger
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import java.util.concurrent.TimeUnit
 
 class TimeTest {
     @Test
@@ -16,5 +19,20 @@ class TimeTest {
         )
         val currentTime = System.currentTimeMillis()
         assert(currentTime <= (result.getMember("Time") as CarbonInteger).value)
+    }
+
+    @Test
+    fun timeChanges() {
+        val exprs = evaluate(
+            """
+            Time = CurrentTime.UnixMillis
+        """
+        )
+
+        val firstTime = unwrap(exprs.getMember("Time") as CarbonInteger)
+        TimeUnit.MILLISECONDS.sleep(15)
+        val secondTime = unwrap(exprs.getMember("Time") as CarbonInteger)
+
+        assert(firstTime < secondTime)
     }
 }

@@ -1,9 +1,12 @@
 package org.carbon.intrepreter
 
 import org.carbon.evaluate
+import org.carbon.runtime.CarbonInteger
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 class AnnotationTest {
     @Test
@@ -34,7 +37,7 @@ class AnnotationTest {
             R = CountDown(100000)
         """
         )
-        kotlin.test.assertEquals(wrap(0), exprs.getMember("R"))
+        assertEquals(wrap(0), exprs.getMember("R"))
     }
 
     @Test
@@ -51,6 +54,26 @@ class AnnotationTest {
             R = Factorial(20)
         """
         )
-        kotlin.test.assertEquals(wrap(2432902008176640000), exprs.getMember("R"))
+        assertEquals(wrap(2432902008176640000), exprs.getMember("R"))
+    }
+
+    @Test
+    @Tag("unreliable")
+    fun sample() {
+        val exprs = evaluate(
+            """
+            #Sample(200)
+            Time = CurrentTime.UnixMillis
+        """
+        )
+
+        val firstTime = unwrap(exprs.getMember("Time") as CarbonInteger)
+        TimeUnit.MILLISECONDS.sleep(300)
+        val secondTime = unwrap(exprs.getMember("Time") as CarbonInteger)
+
+        // If the sampling happens every 100ms, then ideally the times would be 100ms apart.
+        val difference = secondTime - firstTime
+        assert(difference >= 200)
+        assert(difference < 380)
     }
 }

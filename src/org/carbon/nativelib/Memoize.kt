@@ -19,10 +19,6 @@ object MemoizeAnnotation : Callable() {
 class MemoizedFunction(val body: Callable) : Callable() {
     private val lookup = mutableMapOf<List<CarbonObject>, CarbonObject>()
 
-    override fun setScope(lexicalScope: Composite) {
-        body.setScope(lexicalScope)
-    }
-
     override fun apply(arguments: List<CarbonObject>): CarbonObject {
         // Can't use computeIfAbsent here because of concurrent modification
         val cached = lookup[arguments]

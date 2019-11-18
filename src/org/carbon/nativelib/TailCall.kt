@@ -43,7 +43,8 @@ class LoopFunction(val formalParameters: List<String>, val arms: List<LoopArm>, 
     override fun apply(arguments: List<CarbonObject>): CarbonObject {
         var state = formalParameters.zip(arguments).associate { it }
 
-        val scope =  object : Composite(mapOf(), lexicalScope) {
+        // TODO make this less awkward
+        val scope =  object : Composite(lexicalScope) {
             override fun getMember(name: String) : CarbonObject? = state[name]
         }
 
