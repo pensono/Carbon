@@ -8,7 +8,8 @@ private val rootMembers = mapOf<String, CarbonObject>(
     "Memoize" to MemoizeAnnotation,
     "TailCall" to TailCallAnnotation,
     "CurrentTime" to CurrentTime,
-    "Sample" to SampleConstructor
+    "Sample" to SampleConstructor,
+    "File" to FileConstructor
 )
 
 object RootScope : Composite() {
